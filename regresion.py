@@ -27,3 +27,16 @@ print(pd.DataFrame({
     'VIF': [round(variance_inflation_factor(datos.values, i + 1), 2)
             for i in range(len(cols))]
 }).to_string(index=False))
+
+# Particion en entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Entrenamiento del modelo
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Predicciones sobre ambos conjuntos
+y_pred_train = model.predict(X_train)
+y_pred_test = model.predict(X_test)
