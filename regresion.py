@@ -6,6 +6,7 @@ from statsmodels.tools.tools import add_constant
 from sklearn.metrics import root_mean_squared_error
 from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import r2_score
+import matplotlib.pyplot as plt
 
 # Carga de datos
 df = pd.read_csv('logistica_envios.csv')
@@ -62,3 +63,18 @@ print(f'RMSE test: {root_mean_squared_error(y_test, y_pred_test):.2f} USD')
 print(f'MAE test:  {mean_absolute_error(y_test, y_pred_test):.2f} USD')
 print(f'R2 train:  {r2_score(y_train, y_pred_train):.3f}')
 print(f'R2 test:   {r2_score(y_test, y_pred_test):.3f}')
+
+# Grafico de valores reales contra predichos
+
+plt.figure(figsize=(7, 7))
+plt.scatter(y_test, y_pred_test, alpha=0.8, label='Predicciones')
+plt.plot([y.min(), y.max()], [y.min(), y.max()],
+         color='red', linewidth=2, label='Acierto perfecto')
+
+plt.xlabel('Ingresos reales (USD)')
+plt.ylabel('Ingresos predichos (USD)')
+plt.title('Ingresos reales vs predichos - conjunto de prueba')
+
+plt.legend()
+plt.tight_layout()
+plt.show()
