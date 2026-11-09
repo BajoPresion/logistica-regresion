@@ -3,6 +3,9 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 from statsmodels.tools.tools import add_constant
+from sklearn.metrics import root_mean_squared_error
+from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import r2_score
 
 # Carga de datos
 df = pd.read_csv('logistica_envios.csv')
@@ -40,3 +43,22 @@ model.fit(X_train, y_train)
 # Predicciones sobre ambos conjuntos
 y_pred_train = model.predict(X_train)
 y_pred_test = model.predict(X_test)
+
+
+# Coeficientes y metricas
+
+print()
+print(pd.DataFrame({
+    'Variable': cols,
+    'Coeficiente': model.coef_.round(3)
+}).to_string(index=False))
+
+print('Intercepto:', round(model.intercept_, 2))
+
+# Metricas
+
+print()
+print(f'RMSE test: {root_mean_squared_error(y_test, y_pred_test):.2f} USD')
+print(f'MAE test:  {mean_absolute_error(y_test, y_pred_test):.2f} USD')
+print(f'R2 train:  {r2_score(y_train, y_pred_train):.3f}')
+print(f'R2 test:   {r2_score(y_test, y_pred_test):.3f}')
