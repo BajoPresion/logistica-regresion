@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import scipy.stats as stats
 from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 from statsmodels.tools.tools import add_constant
 from sklearn.metrics import root_mean_squared_error
@@ -105,3 +105,11 @@ axes[2].set_title('Histograma de residuos')
 
 plt.tight_layout()
 plt.show()
+
+scores = cross_val_score(model, X_train, y_train, cv=5)
+
+print()
+for i, score in enumerate(scores, 1):
+    print(f'Vuelta {i}: {score:.3f}')
+print(f'Promedio: {scores.mean():.3f}')
+print(f'Desviacion: {scores.std():.3f}')
