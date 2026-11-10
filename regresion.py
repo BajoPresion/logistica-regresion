@@ -1,4 +1,6 @@
 import pandas as pd
+import numpy as np
+import scipy.stats as stats
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from statsmodels.stats.outliers_influence import variance_inflation_factor
@@ -76,5 +78,30 @@ plt.ylabel('Ingresos predichos (USD)')
 plt.title('Ingresos reales vs predichos - conjunto de prueba')
 
 plt.legend()
+plt.tight_layout()
+plt.show()
+
+residuos = y_train - y_pred_train
+
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+
+axes[0].scatter(y_pred_train, residuos, alpha=0.7)
+axes[0].axhline(0, color='red', linestyle='--')
+axes[0].set_xlabel('Valores predichos (USD)')
+axes[0].set_ylabel('Residuos (USD)')
+axes[0].set_title('Residuos vs predichos')
+
+stats.probplot(residuos, dist='norm', plot=axes[1])
+axes[1].set_title('Q-Q normal')
+axes[1].set_xlabel('Cuantiles teoricos')
+axes[1].set_ylabel('Valores ordenados')
+
+axes[2].hist(residuos, bins=15, density=True, alpha=0.7, edgecolor='black')
+x = np.linspace(residuos.min(), residuos.max(), 100)
+axes[2].plot(x, stats.norm.pdf(x, residuos.mean(), residuos.std()), color='red', linewidth=2)
+axes[2].set_xlabel('Residuos (USD)')
+axes[2].set_ylabel('Densidad')
+axes[2].set_title('Histograma de residuos')
+
 plt.tight_layout()
 plt.show()
